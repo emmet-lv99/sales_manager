@@ -8,8 +8,27 @@ contextBridge.exposeInMainWorld(preloadInterface, {
     ipcRenderer.on("channel", (_, data) => callback(data));
   },
   sendMessage: (data) => {
-    console.log("click");
+    // cole.log("click");
     ipcRenderer.send("channel", data);
+  },
+
+  //render => main
+  rText: (callback) => {
+    ipcRenderer.on("rT", (_, data) => {
+      console.log("jjosjdfopjp");
+      callback(data);
+    });
+  },
+
+  // main => render
+  sText: () => {
+    ipcRenderer.send("sT", "");
+  },
+
+  timer: (callback) => {
+    ipcRenderer.on("timer", (_, data) => {
+      callback(data);
+    });
   },
 });
 
