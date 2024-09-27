@@ -1,6 +1,6 @@
-import logo from "./logo.svg";
-import "./App.css";
-import { Preload } from "./main/Preload.js";
+import logo from './logo.svg'
+import './App.css'
+import { Preload } from './main/Preload.js'
 
 function App() {
   return (
@@ -21,7 +21,7 @@ function App() {
         <Preload />
       </header>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
