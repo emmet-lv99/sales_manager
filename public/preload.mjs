@@ -3,31 +3,14 @@ import { contextBridge, ipcRenderer } from 'electron'
 const preloadInterface = 'myPreload'
 
 contextBridge.exposeInMainWorld(preloadInterface, {
-  listenChannelMessage: callback => {
-    console.log('in')
-    ipcRenderer.on('channel', (_, data) => callback(data))
-  },
-  sendMessage: data => {
-    // cole.log("click");
-    ipcRenderer.send('channel', data)
-  },
-
-  //render => main
-  rText: callback => {
-    ipcRenderer.on('rT', (_, data) => {
-      console.log('jjosjdfopjp')
-      callback(data)
-    })
-  },
-
   // main => render
-  sText: () => {
-    ipcRenderer.send('sT', '')
+  copyFile: () => {
+    ipcRenderer.send('COPY_FILE', 'hi')
   },
 
-  timer: callback => {
-    ipcRenderer.on('timer', (_, data) => {
-      callback(data)
+  copiedPath: () => {
+    ipcRenderer.on('COPIED_PATH', (i, args) => {
+      console.log(args)
     })
   },
 })

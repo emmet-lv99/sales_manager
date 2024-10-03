@@ -1,6 +1,6 @@
-import logo from './logo.svg'
 import './App.css'
-import { Preload } from './main/Preload.js'
+import logo from './logo.svg'
+import Page from './main/Page.mjs'
 
 function App() {
   return (
@@ -18,7 +18,7 @@ function App() {
         >
           Learn React
         </a>
-        <Preload />
+        <Page />
       </header>
     </div>
   )
