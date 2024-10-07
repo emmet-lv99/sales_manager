@@ -1,5 +1,8 @@
 import { dialog, ipcMain } from 'electron'
+import Exceljs from 'exceljs'
 import fs from 'fs'
+
+const t = new Exceljs.Workbook()
 
 const { app, BrowserWindow } = await import('electron')
 const path = await import('path')
@@ -83,11 +86,25 @@ ipcMain.on('COPY_FILE', async (event, payload) => {
   //복사 파일 경로
   const copyPath = filePath + fileName + '_copied' + fileExtension
 
-  fs.copyFile(filePathFull, copyPath, async err => {
-    if (err) console.log('err')
-    else {
+  fs.copyFile(filePathFull, copyPath, fs.constants.COPYFILE_EXCL, async err => {
+    if (err) {
+      const alreadCheckFlag = err.message.includes('file already exists')
+      if (alreadCheckFlag) {
+        dialog.showMessageBox({ message: '이미 존재하는 파일명입니다.' })
+      } else {
+        alert('다시 시도해주세요.')
+      }
+    } else {
       log('복사되었습니다.')
-      // const blob = await fs.openAsBlob(copyPath)
+
+      const tt = await t.xlsx.readFile(copyPath)
+      tt.eachSheet(sheet => {
+        sheet.eachRow(row => {
+          row.eachCell(cell => {
+            console.log(cell.value)
+          })
+        })
+      })
       event.reply('COPIED_PATH', copyPath)
     }
   })
