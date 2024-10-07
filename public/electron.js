@@ -83,11 +83,12 @@ ipcMain.on('COPY_FILE', async (event, payload) => {
   //복사 파일 경로
   const copyPath = filePath + fileName + '_copied' + fileExtension
 
-  fs.copyFile(filePathFull, copyPath, err => {
+  fs.copyFile(filePathFull, copyPath, async err => {
     if (err) console.log('err')
     else {
       log('복사되었습니다.')
-      event.sender.send('COPIED_PATH', copyPath)
+      // const blob = await fs.openAsBlob(copyPath)
+      event.reply('COPIED_PATH', copyPath)
     }
   })
 })

@@ -1,23 +1,17 @@
 import { contextBridge, ipcRenderer } from 'electron'
 
-const preloadInterface = 'myPreload'
-
-contextBridge.exposeInMainWorld(preloadInterface, {
+contextBridge.exposeInMainWorld('myPreload', {
   // main => render
   copyFile: () => {
     ipcRenderer.send('COPY_FILE', 'hi')
   },
 
-  copiedPath: () => {
-    ipcRenderer.on('COPIED_PATH', (i, args) => {
-      console.log(args)
-    })
+  tmp: cb => {
+    ipcRenderer.on('COPIED_PATH', (i, args) => cb(args))
   },
 })
 
-const versions = 'versions'
-
-contextBridge.exposeInMainWorld(versions, {
+contextBridge.exposeInMainWorld('versions', {
   node: () => process.versions.node,
   chrome: () => process.versions.chrome,
   electron: () => process.versions.electron,
