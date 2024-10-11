@@ -2,7 +2,7 @@ import { dialog, ipcMain } from 'electron'
 import Exceljs from 'exceljs'
 import fs from 'fs'
 
-const t = new Exceljs.Workbook()
+const workbook = new Exceljs.Workbook()
 
 const { app, BrowserWindow } = await import('electron')
 const path = await import('path')
@@ -82,11 +82,10 @@ ipcMain.on('COPY_FILE', async (event, payload) => {
     fileNameFull.lastIndexOf('.'),
     fileNameFull.length,
   )
-
   //복사 파일 경로
   const copyPath = filePath + fileName + '_copied' + fileExtension
 
-  fs.copyFile(filePathFull, copyPath, fs.constants.COPYFILE_EXCL, async err => {
+  const copyFileCb = async err => {
     if (err) {
       const alreadCheckFlag = err.message.includes('file already exists')
       if (alreadCheckFlag) {
@@ -97,8 +96,9 @@ ipcMain.on('COPY_FILE', async (event, payload) => {
     } else {
       log('복사되었습니다.')
 
-      const tt = await t.xlsx.readFile(copyPath)
-      tt.eachSheet(sheet => {
+      // 데이터 구조화, 특정 row 이하로 데이터 읽어오는 로직 필요
+      const worksheet = await workbook.xlsx.readFile(copyPath)
+      worksheet.eachSheet(sheet => {
         sheet.eachRow(row => {
           row.eachCell(cell => {
             console.log(cell.value)
@@ -107,5 +107,9 @@ ipcMain.on('COPY_FILE', async (event, payload) => {
       })
       event.reply('COPIED_PATH', copyPath)
     }
-  })
+  }
+
+  fs.copyFile(filePathFull, copyPath, fs.constants.COPYFILE_EXCL, err =>
+    copyFileCb(err),
+  )
 })

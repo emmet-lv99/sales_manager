@@ -16,6 +16,7 @@ export const Page = () => {
   }
 
   return (
+    // TODO: UI 디자인
     <div className="App">
       <div>{`This app is using Chrome (v${window.versions.chrome()}), Node.js (v${window.versions.node()}), and Electron (v${window.versions.electron()})`}</div>
       <button onClick={handleClick}>Click me</button>
