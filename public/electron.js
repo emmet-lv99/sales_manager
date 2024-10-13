@@ -26,6 +26,9 @@ function createWindow() {
     },
   })
 
+  //개발자 도구 강제 실행
+  mainWindow.webContents.openDevTools()
+
   // ***중요***
   mainWindow.loadURL(
     isDev
@@ -79,6 +82,16 @@ const template = [
       {
         label: 'Open',
         click: initFile,
+        accelerator: process.platform === 'darwin' ? 'Command+O' : 'Ctrl+O',
+      },
+      { type: 'separator' },
+      {
+        label: 'Extract',
+        click: () => {
+          log('Extract')
+        },
+        accelerator:
+          process.platform === 'darwin' ? 'Command+Shift+E' : 'Ctrl+Shift+E',
       },
     ],
   },
