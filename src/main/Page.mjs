@@ -1,4 +1,4 @@
-import { Col, Divider, Form, Input, Row, Table } from 'antd'
+import { Button, Col, Divider, Form, Input, Row, Table } from 'antd'
 import * as Excel from 'exceljs'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { SizedBox } from '../common/Common.mjs'
@@ -112,12 +112,6 @@ export const Page = () => {
 
   const defaultColumns = [
     {
-      title: '옵션',
-      dataIndex: 'name',
-      width: '30%',
-      editable: true,
-    },
-    {
       title: '주문서',
       children: [
         {
@@ -194,6 +188,12 @@ export const Page = () => {
           </p>
           <Divider />
           <h4>작업 파일: </h4>
+          <SizedBox height={6} />
+          <Row justify="end">
+            <Button size="large" type="primary">
+              반영
+            </Button>
+          </Row>
           <SizedBox height={6} />
           <Table
             components={components}
