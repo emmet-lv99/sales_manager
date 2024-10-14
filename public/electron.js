@@ -135,7 +135,7 @@ async function initFile() {
 
   // 복사 파일 생성
   fs.copyFile(filePathFull, copyPath, fs.constants.COPYFILE_EXCL, err =>
-    copyFileCb(err),
+    copyFileCb(copyPath, err),
   )
 }
 
@@ -175,7 +175,7 @@ async function makeCopyPath(filePathFull) {
   return copyPath
 }
 
-async function copyFileCb(err) {
+async function copyFileCb(copyPath, err) {
   if (err) {
     const alreadCheckFlag = err.message.includes('file already exists')
     if (alreadCheckFlag) {
@@ -188,12 +188,15 @@ async function copyFileCb(err) {
   } else {
     log('복사되었습니다.')
 
+    log('------------------------------------------')
+    mainWindow.webContents.send('F', 'hi i am main')
+    log('------------------------------------------')
     // 데이터 구조화, 특정 row 이하로 데이터 읽어오는 로직 필요
     const worksheet = await workbook.xlsx.readFile(copyPath)
     worksheet.eachSheet(sheet => {
       sheet.eachRow(row => {
         row.eachCell(cell => {
-          console.log(cell.value)
+          // console.log(cell.value)
         })
       })
     })
