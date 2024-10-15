@@ -1,8 +1,9 @@
 import { Button, Col, Divider, Form, Input, Row, Table } from 'antd'
-// import { ipcRenderer } from 'electron'
 import * as Excel from 'exceljs'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { SizedBox } from '../common/Common.mjs'
+
+
 
 const EditableContext = React.createContext(null)
 
@@ -87,15 +88,14 @@ const EditableCell = ({
 
 export const Page = () => {
   const [message, setMessage] = useState(null)
-  const [fileObj, setFileObj] = useState(null)
+  // const [a, setA] = useState(null)
 
-  // ipcRenderer.on('F', (evt, payload) => {
-  //   console.log(payload)
-  // })
-
+  const abcd =  window.abcd
+  
   useEffect(() => {
     window.myPreload.tmp(setMessage)
-  }, [])
+    console.log(abcd)
+  }, [abcd])
 
   const handleClick = () => {
     window.myPreload.copyFile()
@@ -186,7 +186,6 @@ export const Page = () => {
       <Row justify="center">
         <Col style={{ backgroundColor: 'lightgray' }} span={20}>
           <SizedBox height={20} />
-          <h1>{message}</h1>
           <h2>발주서 자동 변환 툴 v1.0</h2>
           <p style={{ lineHeight: '1.7' }}>
             발주서 자동 변환 및 추출 기능을 제공합니다.

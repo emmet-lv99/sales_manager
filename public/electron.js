@@ -20,7 +20,7 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: true,
       enableRemoteModule: true,
-      contextIsolation: true,
+      // contextIsolation: true,
       devTools: isDev,
       preload: path.join(__dirname, 'public/preload.mjs'),
     },
@@ -56,6 +56,8 @@ app.on('activate', () => {
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit()
 })
+
+
 
 const isMac = process.platform === 'darwin'
 
@@ -126,17 +128,33 @@ app.on('browser-window-blur', () => {
   globalShortcut.unregister('F5')
 })
 
+
+
 // 파일 초기화
 async function initFile() {
+
   // 원본 파일 경로 추출
   const filePathFull = await extractOrgPath()
   // 복사할 파일 경로 생성
   const copyPath = await makeCopyPath(filePathFull)
 
   // 복사 파일 생성
-  fs.copyFile(filePathFull, copyPath, fs.constants.COPYFILE_EXCL, err =>
-    copyFileCb(copyPath, err),
-  )
+  try{
+    fs.copyFileSync(filePathFull, copyPath, fs.constants.COPYFILE_EXCL) 
+    copyFileCb(copyPath)
+    mainWindow.webContents.send('abcd', '파일이 카피 되었습니다.')  
+  } catch (e) {
+    log(e)
+  }
+
+
+
+  // const rs = await fs.copyFile(filePathFull, copyPath, fs.constants.COPYFILE_EXCL, err =>
+  //   copyFileCb(copyPath, err),
+  // )
+
+
+
 }
 
 async function extractOrgPath() {
@@ -186,11 +204,6 @@ async function copyFileCb(copyPath, err) {
       alert('다시 시도해주세요.')
     }
   } else {
-    log('복사되었습니다.')
-
-    log('------------------------------------------')
-    mainWindow.webContents.send('F', 'hi i am main')
-    log('------------------------------------------')
     // 데이터 구조화, 특정 row 이하로 데이터 읽어오는 로직 필요
     const worksheet = await workbook.xlsx.readFile(copyPath)
     worksheet.eachSheet(sheet => {

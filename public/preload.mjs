@@ -18,6 +18,10 @@ contextBridge.exposeInMainWorld('versions', {
   // we can also expose variables, not just functions
 })
 
-ipcRenderer.on('F', (evt, payload) => {
-  console.log(payload)
+
+window.abcd = {}
+
+ipcRenderer.on('abcd', (evt, payload) => {
+  window.abcd = {payload}
+  console.log('페이로드를 받았습니다')
 })
